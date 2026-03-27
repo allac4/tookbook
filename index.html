@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>буктук | Книжный магазин</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- ШАПКА САЙТА -->
+    <header>
+        <div class="container header-inner">
+            <!-- Логотип -->
+            <a href="#" class="logo" data-nav="home">
+                <img src="assets/img/logo-beige.svg" alt="БУКТУК" class="logo-img">
+            </a>
+            <!-- Кнопка бургер-меню для мобильных -->
+            <button class="burger" id="burgerBtn">☰</button>
+            <!-- Основное меню навигации -->
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#" data-nav="home">Главная</a></li>
+                <li><a href="#" data-nav="catalog">Каталог</a></li>
+                <li><a href="#" data-nav="contacts">Контакты</a></li>
+            </ul>
+            <!-- Иконки корзины и избранного -->
+            <div class="header-icons">
+                <button class="icon-btn" data-nav="cart" id="cartIconBtn">
+                    <img src="assets/img/cart.svg" alt="Корзина">
+                    <span id="cartCountBadge" class="badge">0</span>
+                </button>
+                <button class="icon-btn" data-nav="favorites" id="favIconBtn">
+                    <img src="assets/img/likes.svg" alt="Избранное">
+                    <span id="favCountBadge" class="badge">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ (динамически загружается через JS) -->
+    <main>
+        <div class="container" id="pageContainer"></div>
+    </main>
+
+    <!-- ПОДВАЛ САЙТА -->
+    <footer>
+        <div class="container footer-inner">
+            <!-- Колонка с логотипом и описанием -->
+            <div class="footer-col">
+                <div class="logo-placeholder">
+                    <img src="assets/img/logo-green.svg" alt="">
+                </div>
+                <p>Книги для всех возрастов<br>Вдохновение на каждый день</p>
+            </div>
+            <!-- Колонка с контактами -->
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <p>г. Стерлитамак, ул. Коммунистическая 148</p>
+                <p>+7 (3473) 12-34-56</p>
+                <p>booktook@books.ru</p>
+            </div>
+            <!-- Колонка со ссылками на разделы -->
+            <div class="footer-col">
+                <h4>Разделы</h4>
+                <p><a href="#" data-nav="home">Главная</a></p>
+                <p><a href="#" data-nav="catalog">Каталог</a></p>
+                <p><a href="#" data-nav="contacts">Контакты</a></p>
+            </div>
+            <!-- Иконки социальных сетей -->
+            <div class="social-icons">
+                <a href="#"><img src="assets/img/icon-vk.svg" alt="VK"></a>
+                <a href="#"><img src="assets/img/icon-tg.svg" alt="TELEGRAM"></a>
+            </div>
+        </div>
+        <div class="copyright container">© 2026 Книжный магазин «БУКТУК». Все права защищены.</div>
+    </footer>
+
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ПОДРОБНОСТЕЙ КНИГИ -->
+    <div id="bookModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
