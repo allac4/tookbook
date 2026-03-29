@@ -1,7 +1,12 @@
+/* ========== ПОДКЛЮЧЕНИЕ ШРИФТОВ ИЗ GOOGLE FONTS (ЗАПАСНЫЕ ВАРИАНТЫ) ========== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Pacifico&display=swap');
+
 /* ========== ЛОКАЛЬНЫЕ ШРИФТЫ ========== */
 @font-face {
     font-family: 'NauryzRedKeds';
-    src: url('assets/fonts/NauryzRedKeds.ttf') format('truetype');
+    src: url('../fonts/NauryzRedKeds.woff2') format('woff2'),
+         url('../fonts/NauryzRedKeds.woff') format('woff'),
+         url('../fonts/NauryzRedKeds.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -9,7 +14,9 @@
 
 @font-face {
     font-family: 'Bounded';
-    src: url('assets/fonts/Bounded-Light.otf') format('opentype');
+    src: url('../fonts/Bounded-Light.woff2') format('woff2'),
+         url('../fonts/Bounded-Light.woff') format('woff'),
+         url('../fonts/Bounded-Light.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -23,7 +30,7 @@
 }
 
 body {
-    font-family: 'Bounded', sans-serif;
+    font-family: 'Bounded', 'Montserrat', sans-serif;
     background-color: #F1CC9B;
     color: #4E2825;
     line-height: 1.5;
@@ -37,7 +44,7 @@ h3,
 .logo,
 .price,
 .accent-text {
-    font-family: 'NauryzRedKeds';
+    font-family: 'NauryzRedKeds', 'Pacifico', cursive;
     font-weight: 600;
 }
 
@@ -185,7 +192,7 @@ footer {
 }
 
 .footer-col h4 {
-    font-family: 'NauryzRedKeds';
+    font-family: 'NauryzRedKeds', 'Pacifico', cursive;
     margin-bottom: 12px;
     font-size: 1.3rem;
     color: #8B8635;
@@ -306,7 +313,7 @@ footer {
     display: inline-block;
 }
 .info-card h3 {
-    font-family: 'NauryzRedKeds';
+    font-family: 'NauryzRedKeds', 'Pacifico', cursive;
     font-size: 1.4rem;
     margin-bottom: 8px; 
     color: #ED553B;
@@ -434,7 +441,7 @@ footer {
 }
 
 .book-price {
-    font-family: 'NauryzRedKeds';
+    font-family: 'NauryzRedKeds', 'Pacifico', cursive;
     font-size: 1.4rem;
     font-weight: bold;
     color: #8B8635;
@@ -457,7 +464,7 @@ footer {
     cursor: pointer;
     transition: 0.2s;
     font-size: 0.8rem;
-    font-family: 'Bounded';  
+    font-family: 'Bounded', 'Montserrat', sans-serif;  
 }
 
 .btn-primary {
@@ -519,7 +526,7 @@ footer {
     font-weight: 500;
     transition: 0.2s;
     color: #4E2825;
-    font-family: 'Bounded';
+    font-family: 'Bounded', 'Montserrat', sans-serif;
 }
 
 .filter-btn.active,
@@ -658,7 +665,7 @@ footer {
     font-weight: 600;
     cursor: pointer;
     transition: 0.2s;
-    font-family: 'Bounded';
+    font-family: 'Bounded', 'Montserrat', sans-serif;
 }
 
 .cat-item:hover {
@@ -710,7 +717,7 @@ footer {
     border-radius: 20px;
     border: 1px solid #ccc;
     background: #F1CC9B;
-    font-family: 'Bounded';
+    font-family: 'Bounded', 'Montserrat', sans-serif;
 }
 
 /* ========== ДОПОЛНИТЕЛЬНЫЕ БЛОКИ НА ГЛАВНОЙ ========== */
