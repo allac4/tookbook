@@ -1,5 +1,4 @@
 // ==================== ДАННЫЕ КНИГ ====================
-// Массив с информацией о всех книгах
 const booksData = [
     { id: 1, title: "Мастер и Маргарита", author: "Михаил Булгаков", genre: "художественная", price: 650, isNew: true, isRecommended: true, image: "assets/img/books/master.webp", description: "Знаменитый роман о любви, дьяволе и Москве 1930-х." },
     { id: 2, title: "Математика. 5 класс", author: "Виленкин Н.Я.", genre: "учебная", price: 890, isNew: false, isRecommended: false, image: "assets/img/books/matesha.webp", description: "Учебник для общеобразовательных учреждений." },
@@ -12,19 +11,16 @@ const booksData = [
     { id: 9, title: "1984", author: "Джордж Оруэлл", genre: "художественная", price: 550, isNew: true, isRecommended: true, image: "assets/img/books/1984.webp", description: "Антиутопия о тоталитаризме." },
     { id: 10, title: "Преступление и наказание", author: "Ф.М. Достоевский", genre: "классическая", price: 680, isNew: false, isRecommended: true, image: "assets/img/books/raskol.webp", description: "Роман о моральных муках." },
     { id: 11, title: "Гарри Поттер и философский камень", author: "Дж.К. Роулинг", genre: "детская", price: 890, isNew: true, isRecommended: true, image: "assets/img/books/potter.webp", description: "Первая книга о юном волшебнике." },
-    { id: 12, title: "Атлант расправил плечи", author: "Айн Рэнд", genre: "художественная", price: 1100, isNew: false, isRecommended: false, image: "assets/img/books/atlant.webp", description: "Философский роман о свободе." },
+    { id: 12, title: "Атлант расправил плечи", author: "Айн Рэнд", genre: "художественная", price: 1100, isNew: false, isRecommended: false, image: "assets/img/books/atlant.webp", description: "Философский роман о свободе." }
 ];
 
 // ==================== КОРЗИНА И ИЗБРАННОЕ ====================
-// Загружаем данные из localStorage или создаём пустые массивы
 let cart = JSON.parse(localStorage.getItem('booktook_cart')) || [];
 let favorites = JSON.parse(localStorage.getItem('booktook_favorites')) || [];
 
-// Сохранение в localStorage и обновление счётчиков
 function saveCart() { localStorage.setItem('booktook_cart', JSON.stringify(cart)); updateBadges(); }
 function saveFav() { localStorage.setItem('booktook_favorites', JSON.stringify(favorites)); updateBadges(); }
 
-// Обновление значков с количеством в шапке
 function updateBadges() {
     const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
     const favCount = favorites.length;
@@ -32,7 +28,6 @@ function updateBadges() {
     document.getElementById('favCountBadge').innerText = favCount;
 }
 
-// Добавление товара в корзину (увеличивает количество, если товар уже есть)
 function addToCart(bookId, quantity = 1) {
     const existing = cart.find(item => item.id === bookId);
     if (existing) existing.quantity += quantity;
@@ -40,22 +35,72 @@ function addToCart(bookId, quantity = 1) {
     saveCart();
 }
 
-// Удаление товара из корзины
 function removeFromCart(bookId) { cart = cart.filter(item => item.id !== bookId); saveCart(); }
 
-// Изменение количества товара
 function updateQuantity(bookId, newQty) {
     if (newQty <= 0) removeFromCart(bookId);
     else { let item = cart.find(i => i.id === bookId); if (item) item.quantity = newQty; saveCart(); }
 }
 
-// Работа с избранным
 function addToFav(bookId) { if (!favorites.includes(bookId)) { favorites.push(bookId); saveFav(); } }
 function removeFromFav(bookId) { favorites = favorites.filter(id => id !== bookId); saveFav(); }
 function isInFav(bookId) { return favorites.includes(bookId); }
 
+// ==================== МОДАЛЬНОЕ ОКНО ЗАКАЗА ====================
+function showOrderModal() {
+    let modal = document.getElementById('orderModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'orderModal';
+        modal.style.cssText = `
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 2001;
+        `;
+        modal.innerHTML = `
+            <div style="
+                background: #e9dbc6;
+                padding: 30px;
+                border-radius: 24px;
+                text-align: center;
+                max-width: 300px;
+                width: 90%;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                font-family: 'Bounded', sans-serif;
+            ">
+                <h3 style="font-family: 'NauryzRedKeds'; color: #8B8635; margin-bottom: 15px;">Заказ принят!</h3>
+                <p style="margin-bottom: 20px;">Спасибо за покупку! Наш менеджер свяжется с вами для подтверждения.</p>
+                <button id="closeOrderModal" style="
+                    background: #8B8635;
+                    border: none;
+                    padding: 8px 20px;
+                    border-radius: 40px;
+                    color: white;
+                    cursor: pointer;
+                    font-family: 'Bounded', sans-serif;
+                ">Хорошо</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    modal.style.display = 'flex';
+    const closeBtn = document.getElementById('closeOrderModal');
+    closeBtn.onclick = () => {
+        modal.style.display = 'none';
+    };
+    modal.onclick = (e) => {
+        if (e.target === modal) modal.style.display = 'none';
+    };
+}
+
 // ==================== ОТРИСОВКА КАРТОЧКИ ====================
-// Создаёт HTML карточки книги
 function renderBookCard(book) {
     const favClass = isInFav(book.id) ? '❤️' : '🤍';
     return `
@@ -77,7 +122,6 @@ function renderBookCard(book) {
 // ==================== РЕНДЕР СТРАНИЦ ====================
 let currentPage = 'home';
 
-// Основная функция переключения страниц
 function renderPage(page) {
     currentPage = page;
     const container = document.getElementById('pageContainer');
@@ -95,7 +139,6 @@ function renderHomePage() {
     const recommended = booksData.filter(b => b.isRecommended);
     return `
         <div class="home-page">
-            <!-- Слайдер баннеров -->
             <div class="banner-slider slider-container">
                 <button class="slider-btn slider-left" id="bannerPrevBtn">❮</button>
                 <div class="slider-track" id="bannerTrack">
@@ -106,21 +149,17 @@ function renderHomePage() {
                 </div>
                 <button class="slider-btn slider-right" id="bannerNextBtn">❯</button>
             </div>
-            <!-- Категории для быстрого перехода -->
             <div class="categories">
                 ${['художественная','учебная','классическая','детская','научная'].map(cat => `<div class="cat-item" data-cat="${cat}">${cat.toUpperCase()}</div>`).join('')}
             </div>
-            <!-- Таймер акции -->
             <div class="timer-box">
                 <h3>Акция: скидка 15% на всё до конца распродажи!</h3>
                 <div class="timer-digits" id="countdownTimer">--:--:--</div>
             </div>
-            <!-- Блок "О магазине" -->
             <div class="about-section">
                 <h2>О магазине</h2>
                 <p>Книжный магазин «БУКТУК» — это уютное пространство для любителей чтения. Мы предлагаем широкий выбор художественной, учебной, научной и детской литературы. Наша цель — вдохновлять и помогать находить книги, которые меняют жизнь.</p>
             </div>
-            <!-- Преимущества -->
             <div class="benefits-section">
                 <h2>Наши преимущества</h2>
                 <div class="benefits-grid">
@@ -129,21 +168,18 @@ function renderHomePage() {
                     <div class="benefit-item"><h3>Низкие цены</h3><p>Постоянные скидки и акции</p></div>
                 </div>
             </div>
-            <!-- Слайдер новинок -->
             <h2>Новинки</h2>
             <div class="slider-container">
                 <button class="slider-btn slider-left" data-slider="new">❮</button>
                 <div class="slider-track" id="newSliderTrack">${newBooks.map(b => renderBookCard(b)).join('')}</div>
                 <button class="slider-btn slider-right" data-slider="new">❯</button>
             </div>
-            <!-- Слайдер рекомендуемых -->
             <h2>Рекомендуем</h2>
             <div class="slider-container">
                 <button class="slider-btn slider-left" data-slider="rec">❮</button>
                 <div class="slider-track" id="recSliderTrack">${recommended.map(b => renderBookCard(b)).join('')}</div>
                 <button class="slider-btn slider-right" data-slider="rec">❯</button>
             </div>
-            <!-- Отзывы -->
             <div class="reviews-section">
                 <h2>Отзывы наших читателей</h2>
                 <div class="reviews-grid">
@@ -176,9 +212,7 @@ function renderContactsPage() {
         <div class="contacts-page">
             <h2>Свяжитесь с нами</h2>
             <p class="contacts-subtitle">Мы всегда рады помочь вам с выбором книг и ответить на вопросы</p>
-            
             <div class="contacts-grid">
-                <!-- Левая колонка: контактная информация -->
                 <div class="contacts-info">
                     <div class="info-card">
                         <i class="fas fa-map-marker-alt"></i>
@@ -213,8 +247,6 @@ function renderContactsPage() {
                         </div>
                     </div>
                 </div>
-
-                <!-- Правая колонка: карта и дополнительная информация -->
                 <div class="contacts-map">
                     <div class="info-card map-card">
                         <h3>Как нас найти</h3>
@@ -243,7 +275,7 @@ function renderContactsPage() {
     `;
 }
 
-// СТРАНИЦА КОРЗИНЫ
+// СТРАНИЦА КОРЗИНЫ (ОБНОВЛЕНА)
 function renderCartPage() {
     if (cart.length === 0) return `<div class="no-items">Корзина пуста. Добавьте книги!</div>`;
     let total = 0;
@@ -257,7 +289,7 @@ function renderCartPage() {
             <button class="btn-secondary remove-cart-item" data-id="${item.id}">Удалить</button></div>
         </div>`;
     }).join('');
-    return `<div><h2>Корзина</h2>${itemsHtml}<h3>Итого: ${total} ₽</h3><button id="clearCartBtn" class="btn-primary">Очистить корзину</button></div>`;
+    return `<div><h2>Корзина</h2>${itemsHtml}<h3>Итого: ${total} ₽</h3><button id="makeOrderBtn" class="btn-primary">Сделать заказ</button></div>`;
 }
 
 // СТРАНИЦА ИЗБРАННОГО
@@ -276,7 +308,6 @@ function renderFavPage() {
 }
 
 // ==================== ОБРАБОТЧИКИ СОБЫТИЙ ====================
-// Подключает обработчики после загрузки страницы
 function attachPageEvents(page) {
     initSliders();
     if (page === 'home') {
@@ -313,8 +344,19 @@ function attachPageEvents(page) {
         container.querySelectorAll('.remove-cart-item').forEach(btn => {
             btn.addEventListener('click', (e) => { removeFromCart(parseInt(btn.dataset.id)); renderPage('cart'); });
         });
-        const clearBtn = document.getElementById('clearCartBtn');
-        if (clearBtn) clearBtn.onclick = () => { cart = []; saveCart(); renderPage('cart'); };
+        const orderBtn = document.getElementById('makeOrderBtn');
+        if (orderBtn) {
+            orderBtn.onclick = () => {
+                if (cart.length > 0) {
+                    showOrderModal();
+                    cart = [];
+                    saveCart();
+                    renderPage('cart');
+                } else {
+                    alert('Корзина пуста, нечего заказывать.');
+                }
+            };
+        }
     }
     if (page === 'favorites') {
         const container = document.getElementById('pageContainer');
@@ -330,16 +372,13 @@ function attachPageEvents(page) {
 // Делегирование событий для кнопок в карточках
 document.getElementById('pageContainer').addEventListener('click', (e) => {
     const target = e.target;
-    // Кнопка "В корзину"
     if (target.classList.contains('add-to-cart-btn')) {
         e.stopPropagation();
         const bookId = parseInt(target.dataset.id);
         addToCart(bookId, 1);
         updateBadges();
         alert('Добавлено в корзину');
-    } 
-    // Кнопка "Избранное"
-    else if (target.classList.contains('fav-toggle')) {
+    } else if (target.classList.contains('fav-toggle')) {
         e.stopPropagation();
         const bookId = parseInt(target.dataset.id);
         if (isInFav(bookId)) {
@@ -356,7 +395,7 @@ document.getElementById('pageContainer').addEventListener('click', (e) => {
     }
 });
 
-// Модальное окно (открывается при клике на карточку)
+// Модальное окно (открытие при клике на карточку)
 document.getElementById('pageContainer').addEventListener('click', (e) => {
     const card = e.target.closest('.book-card');
     if (card && !e.target.closest('.card-buttons')) {
@@ -376,7 +415,6 @@ document.getElementById('pageContainer').addEventListener('click', (e) => {
     }
 });
 
-// Закрытие модального окна
 document.querySelector('.close-modal').addEventListener('click', () => {
     document.getElementById('bookModal').style.display = 'none';
 });
@@ -386,7 +424,6 @@ window.addEventListener('click', (e) => {
 });
 
 // ==================== СЛАЙДЕРЫ ====================
-// Инициализация всех слайдеров (кнопки влево/вправо)
 function initSliders() {
     const sliders = document.querySelectorAll('.slider-container');
     sliders.forEach(container => {
@@ -400,7 +437,6 @@ function initSliders() {
     });
 }
 
-// Управление стрелками баннера (отдельно)
 function initBannerControls() {
     const bannerTrack = document.getElementById('bannerTrack');
     const leftBtn = document.getElementById('bannerPrevBtn');
@@ -416,14 +452,11 @@ function initBannerControls() {
 }
 
 // ==================== ТАЙМЕР ====================
-// Обратный отсчёт до окончания акции
 function startTimer() {
     const timerElement = document.getElementById('countdownTimer');
     if (!timerElement) return;
-    
     const targetDate = new Date();
     targetDate.setDate(targetDate.getDate() + 2);
-    
     function updateTimer() {
         const now = new Date();
         const diff = targetDate - now;
@@ -462,7 +495,6 @@ function stopBannerAutoScroll() {
 }
 
 // ==================== НАВИГАЦИЯ ====================
-// Обработка кликов по ссылкам с data-nav
 document.querySelectorAll('[data-nav]').forEach(el => {
     el.addEventListener('click', (e) => {
         e.preventDefault();
@@ -471,12 +503,10 @@ document.querySelectorAll('[data-nav]').forEach(el => {
     });
 });
 
-// Бургер-меню
 document.getElementById('burgerBtn').addEventListener('click', () => {
     document.getElementById('navMenu').classList.toggle('active');
 });
 
-// Клик по категориям на главной
 document.addEventListener('click', (e) => {
     if (e.target.classList.contains('cat-item')) {
         const genre = e.target.dataset.cat;
@@ -488,15 +518,12 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// ==================== ЗАКРЫТИЕ БУРГЕР-МЕНЮ ====================
-// Закрытие при клике по ссылке
+// Закрытие бургер-меню
 document.querySelectorAll('.nav-menu a').forEach(link => {
     link.addEventListener('click', () => {
         document.getElementById('navMenu').classList.remove('active');
     });
 });
-
-// Закрытие при клике вне меню
 document.addEventListener('click', (e) => {
     const menu = document.getElementById('navMenu');
     const burger = document.getElementById('burgerBtn');
